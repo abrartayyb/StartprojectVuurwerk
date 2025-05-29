@@ -8,17 +8,18 @@ import { Product } from "./Product";
 
 function main(): void {
     console.log("happy new year from: <naam: Abrar Al Tayyb>, <studentnummer: 500950854 >, <klas: F101 >");
-    const pakket: vuurwerk[] = [];
-    eersteStap(pakket);
+    const pakket: Vuurwerk[] = [];
+    stap1(pakket);
     stap2(pakket);
     stap3(pakket);
     stap4(pakket);
     stap5(pakket, 0);
+    printHardeKnallers(pakket, 100);
 }
 
-main();
 
-export class vuurwerk extends Product {
+
+export class Vuurwerk extends Product {
     public _instructie: Instructie;
     // public _omschrijving: string;
 
@@ -41,12 +42,18 @@ export class vuurwerk extends Product {
     }
 }
 
-
-function eersteStap(pakket: Product[]): void {
+// STAP 1 
+// Deze functie voegt vuurwerk toe aan het pakket
+// en drukt de informatie van het vuurwerk af
+// het vuurwerk heeft een naam, prijs en instructie
+// dit zijn de bronnen die ik heb gebruikt:
+// https://www.w3schools.com/js/js_classes.asp
+// https://www.geeksforgeeks.org/typescript-class-inheritance/
+function stap1(pakket: Product[]): void {
     console.log("\n--- STAP 1 ---");
 
     // vuurwerk met Nederlandstalige instructie
-    const vuurwerk1 = new vuurwerk("Veiligheidsbril", 2.5, new Instructie(true, 6, "Draag bij aansteken"));
+    const vuurwerk1 = new Vuurwerk("Veiligheidsbril", 2.5, new Instructie(true, 6, "Draag bij aansteken"));
     // vuurwerk1 is een instantie van de vuurwerk class
     // en wordt toegevoegd aan het pakket
     // toString methode wordt aangeroepen om de informatie van het vuurwerk af te drukken
@@ -54,12 +61,12 @@ function eersteStap(pakket: Product[]): void {
     console.log(vuurwerk1.toString());
 
     // vuurwerk met Engelstalige instructie
-    const vuurwerk2 = new vuurwerk("Safety glass", 2.5, new Instructie(false, 6, "Wear before ignition"));
+    const vuurwerk2 = new Vuurwerk("Safety glass", 2.5, new Instructie(false, 6, "Wear before ignition"));
     pakket.push(vuurwerk2);
     console.log(vuurwerk2.toString());
 
     // vuurwerk zonder instructie
-    const vuurwerk3 = new vuurwerk("Aansteeklont zonder instructie", 0.25, new Instructie(false, 0, ""));
+    const vuurwerk3 = new Vuurwerk("Aansteeklont zonder instructie", 0.25, new Instructie(false, 0, ""));
     pakket.push(vuurwerk3);
     console.log(vuurwerk3.toString());
 
@@ -95,11 +102,21 @@ class Knaller extends Product {
         // de /n/ is voor een nieuwe regel
         // de \t is voor een tab
         // de instructie wordt afgedrukt met de toString() methode van de Instructie class
-        return `${super.toString()}\n\tInstructie: ${this.toString()}`;
+        // ik had hier eerst $ this.toString() gebruikt, maar dat gaf een foutmelding
+        return `${super.toString()}\n\tInstructie: ${this.omschrijving}`;
     }
 
     
 }
+
+// STAP 2
+// Deze functie voegt knallers toe aan het pakket
+// en drukt de informatie van de knallers af
+// de knallers hebben een naam, prijs, nederlandstalig, minimumleeftijd en omschrijving
+// methode toString() wordt gebruikt om de informatie van de knallers af te drukken
+// bronnen:
+// https://www.w3schools.com/js/js_if_else.asp
+// https://www.geeksforgeeks.org/inheritance-in-typescript/
 function stap2(pakket: Product[]): void {
     console.log("\n--- STAP 2 ---");
 
@@ -125,7 +142,7 @@ function stap2(pakket: Product[]): void {
     console.log(knaller4.toString());
 }
 
-export class Vuurpijl extends vuurwerk {
+export class Vuurpijl extends Vuurwerk {
     constructor(
         naam: string, 
         prijs: number,
@@ -155,6 +172,13 @@ export class Vuurpijl extends vuurwerk {
 
 
 }
+ // STAP 3
+// Deze functie voegt vuurpijlen toe aan het pakket
+// en drukt de informatie van de vuurpijlen af
+// de vuurpijlen hebben een naam, prijs, kracht, kleurenverhouding en instructie
+// bronnen:
+// https://www.w3schools.com/js/js_arrays.asp
+//
 
 function stap3(pakket: Product[]): void {
     console.log("\n--- STAP 3 ---");
@@ -175,10 +199,13 @@ function stap3(pakket: Product[]): void {
     console.log(vuurpijl3.toString());
 }
 
-
-// maak een nieuwe functie stap4(pakket: vuurwerk[]: void ): void {
-// ik heb hiervoor dit gebruikt: w3schools- javascript For loop:https://www.w3schools.com/js/js_loop_for.asp
-
+// STAP 4
+// Deze functie controleert of het vuurwerk legaal is
+// en drukt de informatie van het vuurwerk af
+// de vuurwerk heeft een naam, prijs en instructie
+// bronnen:
+// https://www.w3schools.com/js/js_loop_for.asp
+// https://www.geeksforgeeks.org/typescript-instanceof-operator/
 function stap4(pakket: Product[]): void {
     console.log("\n--- STAP 4 ---");
     for (let i = 0; i < pakket.length; i++) {
@@ -197,7 +224,14 @@ function stap4(pakket: Product[]): void {
     }
 }
 
-function stap5(pakket: vuurwerk[], index: number): void {
+// STAP 5
+// Deze functie controleert of er een instructie is voor het vuurwerk
+// en drukt de informatie van de instructie af
+// de functie neemt een pakket en een index als parameters
+// bronnen:
+// https://www.w3schools.com/js/js_array_methods.asp
+// https://www.w3schools.com/js/js_functions.asp
+function stap5(pakket: Vuurwerk[], index: number): void {
     console.log(`\n--- STAP5 ---`);
 
     // als de index kleiner is dan 0 of groter is dan de lengte van het pakket
@@ -211,12 +245,33 @@ function stap5(pakket: vuurwerk[], index: number): void {
 
     // controleert of er een instructie is 
 
-if (!vuurwerk._instructie || vuurwerk._instructie._omschrijving === "") {
+    if (!vuurwerk._instructie || vuurwerk._instructie._omschrijving === "") {
     console.log("er is geen instructie");
-} else {
+    } else {
     console.log(vuurwerk._instructie.toString());
 }
 }
+// STAP 6
+// Deze functie controleert of er harde knallers zijn in het pakket
+// en drukt de informatie van de harde knallers af
+// bronnen:
+// https://www.geeksforgeeks.org/typescript-instanceof-operator/
+// 
+function printHardeKnallers(pakket: Vuurwerk[], drempel:number): void {
+    console.log(`\n--- STAP 6 ---`);
+
+    for(let i = 0; i < pakket.length; i++) {
+        const item = pakket[i];
+        // controleer of het item een Knaller is en of de kracht hoger is dan de drempel
+        if (item instanceof Knaller && item.kracht > drempel) {
+            console.log(`Harde knaller gevonden: ${item.toString()}`);
+        } else {
+            console.log(`Geen harde knaller gevonden: ${item.toString()}`);
+        }
+    }
+}
+main();
+
 
 
 // function main(): void {
