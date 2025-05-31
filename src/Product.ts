@@ -8,14 +8,14 @@ export abstract class Product {
     _naam: string;
     _prijs: number;
     kracht: number = 0;
-    kleurenverhouding: number = 0;
+    kleurverhouding: number = 0;
 
 
     constructor(naam: string, prijs: number) {
         this._naam = naam;
         this._prijs = prijs;
         this.kracht = 0;
-        this.kleurenverhouding = 0;
+        this.kleurverhouding = 0;
     }
 
     public abstract isLegaal(): boolean;
