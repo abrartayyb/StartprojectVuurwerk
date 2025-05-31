@@ -9,14 +9,21 @@ import { Product } from "./Product";
 function main(): void {
     console.log("happy new year from: <naam: Abrar Al Tayyb>, <studentnummer: 500950854 >, <klas: F101 >");
     const pakket: Vuurwerk[] = [];
+    // parameters doorgeven aan de functies
     stap1(pakket);
     stap2(pakket);
     stap3(pakket);
     stap4(pakket);
     stap5(pakket, 0);
-    printHardeKnallers(pakket, 100);
+    printHardeKnallers(pakket, 100, 100);
 }
 
+/**
+ * Beschrijft de veiligheidsinstructie van vuurwerk
+ * @param nederlandstalig Of de instructie Nederlandstalig is
+ * @param minimumLeeftijd Minimale leeftijd voor gebruik
+ * @param omschrijving De gebruiksinstructie
+ */
 
 
 export class Vuurwerk extends Product {
@@ -38,7 +45,7 @@ export class Vuurwerk extends Product {
         // de /n/ is voor een nieuwe regel
         // de \t is voor een tab
         // de instructie wordt afgedrukt met de toString() methode van de Instructie class
-        return `${super.toString()}\n\tInstructie: ${this._instructie.toString()}`;
+       return `${super.toString()}\tInstructie: ${this._instructie ? this._instructie.toString() : "ontbreekt"}\tLegaal: ${this.isLegaal()}`;
     }
 }
 
@@ -74,27 +81,24 @@ function stap1(pakket: Product[]): void {
 }
 
 
-class Knaller extends Product {
-    nederlandstalig: boolean; 
-    minimumLeeftijd: number;
-    omschrijving: string;
-    static nederlandstalig: boolean;
-    static minimumLeeftijd: number;
-    static omschrijving: string;
+ export class Knaller extends Vuurwerk {
+    private _aantalKnallers: number = 0; // aantal knallers in de verpakking
+    private _decibel: number = 0; // decibel van de knaller
 
+    // Getter voor aantalKnallers- private
+    public get decibel(): number {
+        return this._decibel;
+    }
 
-    constructor(naam: string, prijs: number, nederlandstalig: boolean, minimumleeftijd: number, omschrijving: string) {
-        super(naam, prijs); // Roept de constructor van Product aan
-        this.nederlandstalig = nederlandstalig;
-        this.minimumLeeftijd = minimumleeftijd;
-        this.omschrijving = omschrijving;
+    constructor(naam: string, prijs: number, aantalKnallers: number, decibel: number, instructie: Instructie) {
+        super(naam, prijs, instructie); // Roept de constructor van Product aan
+        this._aantalKnallers = aantalKnallers; // aantal knallers in de verpakking
+        this._decibel = decibel; // decibel van de knaller
     }
 
     // public isLegaal is een methode die controleert of de knaller legaal is
     public isLegaal(): boolean {
-        // Een knaller is pas legaal als er een instructie is EN deze Nederlandstalig is
-        // > betekent dat de knaller alleen legaal is voor mensen van 16 jaar en ouder
-        return this.nederlandstalig && this.minimumLeeftijd >= 16;
+        return this._decibel <= 120;
     }
 
     public toString(): string {
@@ -103,7 +107,7 @@ class Knaller extends Product {
         // de \t is voor een tab
         // de instructie wordt afgedrukt met de toString() methode van de Instructie class
         // ik had hier eerst $ this.toString() gebruikt, maar dat gaf een foutmelding
-        return `${super.toString()}\n\tInstructie: ${this.omschrijving}`;
+        return `${super.toString()}\n\taantalKnallen: ${this._aantalKnallers}\n\tdecibel: ${this._decibel}`;
     }
 
     
@@ -122,53 +126,89 @@ function stap2(pakket: Product[]): void {
 
     
     // knaller met Engelstalige instructie
-    const knaller1 = new Knaller("Celebration Crackers", 10, false, 75, "Keep minimum 10 ft distance");
+    const knaller1 = new Knaller(
+        "Celebration Crackers", 10,
+        20, // aantalKnallers
+        75, // decibel
+        new Instructie(false, 12, "Keep minimum 10 ft distance")
+    );
     pakket.push(knaller1);
     console.log(knaller1.toString());
 
     // knaller met Nederlandstalige instructie en 120 decibel
-    const knaller2 = new Knaller("Peking Rol", 45, true, 120, "Houd minimaal 5 meter afstand");
+    const knaller2 = new Knaller(
+        "Peking Rol",
+        45,
+        30, // aantalKnallers
+        120, // decibel
+        new Instructie(true, 16, "Houd minimaal 5 meter afstand")
+    );
     pakket.push(knaller2);
     console.log(knaller2.toString());
 
     // knaller met Nederlandstalige instructie en 125 decibel
-    const knaller3 = new Knaller("Shanghai Rol", 85, true, 125, "Houd minimaal 5 meter afstand");
+    const knaller3 = new Knaller(
+        "Shanghai Rol",
+        85,
+        40, // aantalKnallers
+        125, // decibel
+        new Instructie(true, 16, "Houd minimaal 5 meter afstand")
+    );
     pakket.push(knaller3);
     console.log(knaller3.toString());
 
-    // knaller zonder instructie en 100 decibel
-    const knaller4 = new Knaller("Hongkong Rol", 82.5, false, 1000, ""); // prijs: 82.5, nederlandstalig: false, minimumleeftijd: 1000, omschrijving: ""
+    // knaller zonder instructie en 1000 decibel
+    const knaller4 = new Knaller(
+        "Hongkong Rol",
+        82.5,
+        50, // aantalKnallers
+        1000, // decibel
+        new Instructie(false, 18, "")
+    );
     pakket.push(knaller4);
     console.log(knaller4.toString());
 }
 
 export class Vuurpijl extends Vuurwerk {
+    private _hoogte: number = 0; // hoogte van de vuurpijl in meters
+    private _kleurverhouding: number[] = []; // kleurenverhouding van de vuurpijl
     constructor(
         naam: string, 
         prijs: number,
-        private _kracht: number,
-        private _kleurenverhouding: number[], // een array van kleuren 
+        _hoogte: number,
+        _kleurverhouding: number[], // een array van kleuren 
         instructie: Instructie
          ) {
         super(naam, prijs, instructie); // Roept de constructor van vuurwerk aan
+        this._hoogte = _hoogte; // hoogte van de vuurpijl in meters
+        this._kleurverhouding = _kleurverhouding; // kleurenverhouding van de vuurpijl
     }
 
-    public isLegaal(): boolean {
-        // pak de kleuren uit de erray van de kleurenverhouding
-        const rood = this._kleurenverhouding[0];
-        const groen = this._kleurenverhouding[1];
-        const blauw = this._kleurenverhouding[2];
-
-        // constroleer of instructie nederlandstalig is 
-        // kracht lager dan 120 
-        // kleuren precies 50, 25, 25 
-        return this._kracht < 120 &&
-            this._kleurenverhouding.length === 3 &&
-            rood === 50 && groen === 25 && blauw === 25;
-
-
-            
+public isLegaal(): boolean {
+    // pak de kleuren uit de erray van de kleurenverhouding
+    // en controleer of de kleurenverhouding precies 50, 25, 25 is
+    const [rood, groen, blauw] = this._kleurverhouding;
+    // controle methode voor de kleurverhouding
+    // controle via methode correcteKleurverhouding()
+    // Je moet checken of kleurverhouding optelt tot 100%. Als dat niet zo is, dan:
+    // Meld een fout met console.error
+    // Stel kleur in op [100, 0, 0]
+    if (!this.correcteKleurverhouding(this._kleurverhouding)) {
+        console.error("Kleurverhouding is niet correct, wordt aangepast naar [100, 0, 0]");
+        this._kleurverhouding = [100, 0, 0]; // pas de kleurverhouding aan
     }
+
+    // constroleer of instructie nederlandstalig is 
+    // kracht lager dan 120 
+    // kleuren precies 50, 25, 25 
+    return this._hoogte < 120 &&
+        this._kleurverhouding.length === 3 &&
+        rood === 50 && groen === 25 && blauw === 25;
+}
+
+private correcteKleurverhouding(kleuren: number[]): boolean {
+    return kleuren.length === 3 && kleuren.reduce((a, b) => a + b, 0) === 100;
+}
 
 
 }
@@ -257,13 +297,13 @@ function stap5(pakket: Vuurwerk[], index: number): void {
 // bronnen:
 // https://www.geeksforgeeks.org/typescript-instanceof-operator/
 // 
-function printHardeKnallers(pakket: Vuurwerk[], drempel:number): void {
+function printHardeKnallers(pakket: Vuurwerk[], _decibel: number, drempel:number): void {
     console.log(`\n--- STAP 6 ---`);
 
     for(let i = 0; i < pakket.length; i++) {
         const item = pakket[i];
         // controleer of het item een Knaller is en of de kracht hoger is dan de drempel
-        if (item instanceof Knaller && item.kracht > drempel) {
+        if (item instanceof Knaller && item.decibel > drempel) {
             console.log(`Harde knaller gevonden: ${item.toString()}`);
         } else {
             console.log(`Geen harde knaller gevonden: ${item.toString()}`);

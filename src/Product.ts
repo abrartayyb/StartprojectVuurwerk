@@ -1,8 +1,9 @@
-export class Product {
+export abstract class Product {
     /**
      * Symbool voor Euro-teken
      */
     public static readonly EURO: string = "\u20AC";
+    
 
     _naam: string;
     _prijs: number;
@@ -16,6 +17,8 @@ export class Product {
         this.kracht = 0;
         this.kleurenverhouding = 0;
     }
+
+    public abstract isLegaal(): boolean;
 
     public toString(): string {
         return `Naam: ${this._naam}\n\tPrijs: ${Product.EURO}${this._prijs.toFixed(2)}`;
