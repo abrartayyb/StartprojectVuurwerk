@@ -8,8 +8,10 @@ import { Product } from "./Product";
 
 function main(): void {
     console.log("happy new year from: <naam: Abrar Al Tayyb>, <studentnummer: 500950854 >, <klas: F101 >");
+    // lijst van vuurwerk
     const pakket: Vuurwerk[] = [];
     // parameters doorgeven aan de functies
+    // aanroepen van functies
     stap1(pakket);
     stap2(pakket);
     stap3(pakket);
@@ -27,6 +29,7 @@ function main(): void {
 
 
 export class Vuurwerk extends Product {
+    // vuurwerk bevat een instantie van de Instructie class
     public _instructie: Instructie;
     // public _omschrijving: string;
 
