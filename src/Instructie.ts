@@ -20,6 +20,10 @@ export class Instructie{
         return this._minimumLeeftijd;
     }
 
+    get omschrijving(): string {
+        return this._omschrijving;
+    }
+
     public toString(): string {
         return `Nederlandstalig=${this._nederlandstalig}, leeftijd=${this._minimumLeeftijd}, omschrijving=${this._omschrijving}`;
     }
